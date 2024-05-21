@@ -1,0 +1,7 @@
+tunnels:
+  web1:
+    proto: http
+    addr: 8080
+  web2:
+    proto: http
+    addr: 9090
