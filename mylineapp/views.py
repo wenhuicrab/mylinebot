@@ -35,7 +35,7 @@ def callback(request):
             if isinstance(event, MessageEvent):
                 tdnow = datetime.datetime.now()
                 msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text 
-                imgurl="https://i.imgur.com/6hVi7dy.gif"
+                imgurl="https://i.imgur.com/MvBa5cX.jpeg"
                 # 回傳文字訊息+貼圖
                 line_bot_api.reply_message(
 
