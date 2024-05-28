@@ -42,7 +42,7 @@ def callback(request):
 
                     [ TextSendMessage(text=msg),
 
-                      StickerSendMessage(package_id=789, sticker_id=10856)
+                      StickerSendMessage(package_id=6136, sticker_id=10551378)
 
                     ]
 
