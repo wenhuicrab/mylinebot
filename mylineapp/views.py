@@ -9,6 +9,7 @@ from linebot.models import MessageEvent, TextSendMessage
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+import datetime
 
 def index(request):
     return HttpResponse("hello")
@@ -30,11 +31,16 @@ def callback(request):
         for event in events:
             # 若有訊息事件
             if isinstance(event, MessageEvent):
-                # 回傳收到的文字訊息
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=event.message.text))
+                tdnow = datetime.datetime.now()
 
+                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
+                # 回傳收到的文字訊息
+
+                line_bot_api.reply_message(
+
+                    event.reply_token,
+
+                    TextSendMessage(text=msg))
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
