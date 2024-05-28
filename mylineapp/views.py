@@ -34,15 +34,20 @@ def callback(request):
             if isinstance(event, MessageEvent):
                 tdnow = datetime.datetime.now()
 
-                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text + event.sticker.text
-                # 回傳收到的文字訊息
+                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text 
+             # 回傳文字訊息+貼圖
 
-                line_bot_api.reply_message(
+              line_bot_api.reply_message(
 
                     event.reply_token,
 
-                    TextSendMessage(text=msg))
-                    StickerSendMessage(package_id=1, sticker_id=2)
+                    [ TextSendMessage(text=msg),
+
+                      StickerSendMessage(package_id=789, sticker_id=10856)
+
+                    ]
+
+                    )
 
         return HttpResponse()
     else:
