@@ -33,11 +33,10 @@ def callback(request):
             # 若有訊息事件
             if isinstance(event, MessageEvent):
                 tdnow = datetime.datetime.now()
-
                 msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text 
-             # 回傳文字訊息+貼圖
-
-              line_bot_api.reply_message(
+             
+                # 回傳文字訊息+貼圖
+                line_bot_api.reply_message(
 
                     event.reply_token,
 
