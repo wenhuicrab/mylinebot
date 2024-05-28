@@ -7,6 +7,7 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 from linebot.models import StickerSendMessage
+from linebot.models import ImageSendMessage
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
@@ -34,7 +35,7 @@ def callback(request):
             if isinstance(event, MessageEvent):
                 tdnow = datetime.datetime.now()
                 msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text 
-             
+                imgurl="https://i.imgur.com/6hVi7dy.gif"
                 # 回傳文字訊息+貼圖
                 line_bot_api.reply_message(
 
@@ -42,8 +43,10 @@ def callback(request):
 
                     [ TextSendMessage(text=msg),
 
-                      StickerSendMessage(package_id=6136, sticker_id=10551378)
+                      StickerSendMessage(package_id=6136, sticker_id=10551378),
 
+                      ImageSendMessage(original_content_url=imgurl,
+                      preview_image_url=imgurl)
                     ]
 
                     )
