@@ -34,7 +34,7 @@ def callback(request):
             if isinstance(event, MessageEvent):
                 tdnow = datetime.datetime.now()
 
-                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
+                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text + event.sticker.text
                 # 回傳收到的文字訊息
 
                 line_bot_api.reply_message(
