@@ -68,6 +68,13 @@ def callback(request):
                         ImageSendMessage(original_content_url=img,
                         preview_image_url=img)
                     )
+                elif msg.startswith('今天誰'):
+                    names = ['馮雅嵐','鍾旻蓁','陳玟卉','施芷庭','吉彥安']
+                    msg = msg.replace('誰','')+'的是:'+random.choice(names)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
 
                 else:
                     tdnow = datetime.datetime.now()
