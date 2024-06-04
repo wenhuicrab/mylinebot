@@ -12,7 +12,7 @@ from linebot.models import ImageSendMessage
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 import datetime
-
+import random
 def index(request):
     return HttpResponse("hello")
 
@@ -37,18 +37,36 @@ def callback(request):
                 msg = event.message.text
                 imgurl="https://i.imgur.com/6hVi7dy.gif"
 
-                if msg=='hello' or msg=='hi':
+                if msg=='hello' or msg=='hi'or msg=='嗨'or msg=='哈囉':
                     # 回傳貼圖
                     line_bot_api.reply_message(
                         event.reply_token,
                         StickerSendMessage(package_id=789, sticker_id=10856)
                     )
 
-                elif msg=='who are you':
-                    msg = 'I am your good friend~!'
+                elif msg=='你是誰':
+                    msg = '我是蔣中正!'
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=msg)
+                    )
+
+                elif msg== '猜數字':
+                    num = random.randint(1,100)
+                    msg = f"{num}"
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
+
+                elif msg=='求籤' or msg=='抽籤':
+                    num = random.randint(1,100)
+                    img = f"https://www.lungshan.org.tw/fortune_sticks/images/{num:03d}.jpg"
+
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        ImageSendMessage(original_content_url=img,
+                        preview_image_url=img)
                     )
 
                 else:
