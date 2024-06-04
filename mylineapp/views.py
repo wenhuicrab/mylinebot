@@ -29,26 +29,37 @@ def callback(request):
             return HttpResponseForbidden()
         except LineBotApiError:
             return HttpResponseBadRequest()
-
+        
         for event in events:
             # 若有訊息事件
             if isinstance(event, MessageEvent):
-                tdnow = datetime.datetime.now()
-                msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text 
+
+                msg = event.message.text
                 imgurl="https://i.imgur.com/6hVi7dy.gif"
-                # 回傳文字訊息+貼圖
-                line_bot_api.reply_message(
 
-                    event.reply_token,
+                if msg=='hello' or msg=='hi':
+                    # 回傳貼圖
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        StickerSendMessage(package_id=789, sticker_id=10856)
+                    )
 
-                    [ TextSendMessage(text=msg),
+                elif msg=='who are you':
+                    msg = 'I am your good friend~!'
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
 
-                      StickerSendMessage(package_id=6136, sticker_id=10551378),
-
-                      ImageSendMessage(original_content_url=imgurl,
-                      preview_image_url=imgurl)
-                    ]
-
+                else:
+                    tdnow = datetime.datetime.now()
+                    msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
+                    # 回傳收到的文字訊息
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                        ImageSendMessage(original_content_url=imgurl,
+                        preview_image_url=imgurl)
                     )
 
         return HttpResponse()
