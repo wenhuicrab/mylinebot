@@ -57,7 +57,7 @@ def callback(request):
                     # 回傳收到的文字訊息
                     line_bot_api.reply_message(
                         event.reply_token,
-                        TextSendMessage(text=msg)
+                        TextSendMessage(text=msg),
                         ImageSendMessage(original_content_url=imgurl,
                         preview_image_url=imgurl)
                     )
