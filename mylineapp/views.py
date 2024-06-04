@@ -41,7 +41,7 @@ def callback(request):
                     # 回傳貼圖
                     line_bot_api.reply_message(
                         event.reply_token,
-                        StickerSendMessage(package_id=789, sticker_id=10856)
+                        StickerSendMessage(package_id=11537, sticker_id=52002738)
                     )
 
                 elif msg=='你是誰':
@@ -52,7 +52,7 @@ def callback(request):
                     )
 
                 elif msg== 'guess':
-                    num = random.randint(1,100)
+                    num = random.randint(1,10)
                     msg = f"{num}"
                     line_bot_api.reply_message(
                         event.reply_token,
