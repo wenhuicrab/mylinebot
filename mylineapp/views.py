@@ -51,7 +51,7 @@ def callback(request):
                         TextSendMessage(text=msg)
                     )
 
-                elif msg== '猜數字':
+                elif msg== 'guess':
                     num = random.randint(1,100)
                     msg = f"{num}"
                     line_bot_api.reply_message(
