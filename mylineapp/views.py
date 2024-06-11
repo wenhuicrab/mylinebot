@@ -16,6 +16,49 @@ import random
 def index(request):
     return HttpResponse("hello")
 
+import requests
+from bs4 import BeautifulSoup
+
+def getInvoice():
+    url = "https://invoice.etax.nat.gov.tw"
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
+    headers = {'User-Agent': user_agent}
+    html = requests.get(url, headers=headers)
+    # html = requests.get(url)
+    html.encoding ='uft-8'
+    soup = BeautifulSoup(html.text, 'html.parser')
+
+    period = soup.find("a", class_="etw-on")
+    rr = period.text+"\n"
+
+    nums = soup.find_all("p", class_="etw-tbiggest")
+    rr += "特別獎：" + nums[0].text + "\n"
+    rr += "特獎：" + nums[1].text + "\n"
+    rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
+
+    return rr
+
+
+def getNews(num=10):
+    """"擷取中央社新聞"""
+    url = "https://www.cna.com.tw/list/aall.aspx"
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:77.0) Gecko/20100101 Firefox/77.0'}
+    html = requests.get(url, headers=headers)
+    
+    soup = BeautifulSoup(html.text, 'html.parser')
+    soup.encoding = 'utf-8'
+    
+    allnews = soup.find(id="jsMainList")
+    nn = allnews.find_all('li')
+    
+    mm = ""
+    for n in nn[:num]:
+        mm += n.find('div',class_='date').text +' '
+        mm += n.find('h2').text +'\n'
+        mm += 'https://www.cna.com.tw/' + n.find('a').get('href') +'\n'
+        mm += '-'*30+'\n'
+    return mm
+
 
 @csrf_exempt
 def callback(request):
@@ -58,7 +101,21 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
+                    
+                 elif msg=='最新消息' or msg=='今日新聞':
+                    sms = getNews(6)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=sms)
+                    )
 
+                 elif msg=='統一發票':
+                    msg = getInvoice()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
+                     
                 elif msg=='求籤' or msg=='抽籤':
                     num = random.randint(1,100)
                     img = f"https://www.lungshan.org.tw/fortune_sticks/images/{num:03d}.jpg"
