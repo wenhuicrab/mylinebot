@@ -102,14 +102,14 @@ def callback(request):
                         TextSendMessage(text=msg)
                     )
                     
-                 elif msg=='最新消息' or msg=='今日新聞':
+                elif msg=='最新消息' or msg=='今日新聞':
                     sms = getNews(6)
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=sms)
                     )
 
-                 elif msg=='統一發票':
+                elif msg=='統一發票':
                     msg = getInvoice()
                     line_bot_api.reply_message(
                         event.reply_token,
