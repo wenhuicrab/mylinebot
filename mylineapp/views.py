@@ -38,7 +38,7 @@ def getInvoice():
     rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
 
     return rr
-def multiplication_quiz(reply_token):
+def multiplication_quiz():
     correct_count = 0
     
     while correct_count < 10:
@@ -177,9 +177,12 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
-                 elif msg == ('九九乘法表'):
-                    multiplication_quiz(event.reply_token)
-
+                 elif msg == '九九乘法表':
+                   msg = multiplication_quiz()
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
                 else:
                     tdnow = datetime.datetime.now()
                     msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
