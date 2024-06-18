@@ -16,6 +16,10 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 import datetime
 import random
 
+waiting_for_answer = False
+current_question = None
+correct_count = 0
+
 def index(request):
     return HttpResponse("hello")
 
