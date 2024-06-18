@@ -10,6 +10,7 @@ from linebot.models import StickerSendMessage
 from linebot.models import ImageSendMessage
 from linebot.models import LocationSendMessage
 from quiz import start_quiz, handle_answer
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 import datetime
@@ -163,6 +164,7 @@ def callback(request):
                     start_quiz(event.reply_token)  # 呼叫 start_quiz 函式來啟動測驗
                 elif waiting_for_answer:
                     handle_answer(msg, event.reply_token)
+                    
                 else:
                     tdnow = datetime.datetime.now()
                     msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
