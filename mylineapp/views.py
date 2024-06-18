@@ -38,6 +38,27 @@ def getInvoice():
     rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
 
     return rr
+
+def cambridge(word):
+    url = 'https://dictionary.cambridge.org/dictionary/english-chinese-traditional/'+word
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
+    headers = {'User-Agent': user_agent}
+    web_request = requests.get(url, headers=headers)
+    soup = BeautifulSoup(web_request.text, "html.parser")
+    entries = soup.find_all("div", class_="entry-body__el")
+    rr = ""
+    for entry in entries:
+        rr += entry.find('div',class_="posgram").text + '\n'
+        i=1
+        ddefs = entry.find_all("div", class_="def-body")
+        i=1
+        for ddef in ddefs:
+            tran = ddef.find('span')
+            rr += str(i) +'.'+tran.text+"\n"
+            i+=1
+    rr += "\n出處:" + url
+    return rr
+    
 def multiplication_quiz():
     correct_count = 0
     
@@ -145,6 +166,12 @@ def callback(request):
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=msg)
+                    )
+                elif msg.startswith('/'):
+                    sms = cambridge( msg[1:] )
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=sms)
                     )
                     
                 elif msg=='最新消息' or msg=='今日新聞':
