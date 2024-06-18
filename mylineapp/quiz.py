@@ -1,5 +1,4 @@
 import random
-from linebot.models import TextSendMessage
 
 current_question = None
 correct_count = 0
