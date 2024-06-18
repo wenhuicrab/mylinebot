@@ -177,7 +177,7 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
-                 elif msg == '九九乘法表':
+                 elif msg == ('九九乘法表'):
                     multiplication_quiz(event.reply_token)
 
                 else:
