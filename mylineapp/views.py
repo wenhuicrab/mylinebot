@@ -164,10 +164,9 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
-                elif msg == '九九乘法表':
-                    start_quiz(event.reply_token, line_bot_api)  # 傳遞 line_bot_api 參數
-                elif waiting_for_answer:
-                    handle_answer(msg, event.reply_token, line_bot_api)  # 傳遞 line_bot_api 參數
+                elif msg == '九九乘法':
+                    start_quiz()
+                    multiplication_quiz(event.reply_token)
                     
                 else:
                     tdnow = datetime.datetime.now()
