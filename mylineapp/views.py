@@ -58,48 +58,18 @@ def cambridge(word):
             i+=1
     rr += "\n出處:" + url
     return rr
-    
+
+
+waiting_for_answer = False
+current_reply_token = None
+current_question = None
+correct_count = 0  
 def start_quiz(reply_token):
-    global waiting_for_answer, current_reply_token, current_question
+    global waiting_for_answer, current_reply_token, correct_count
     waiting_for_answer = True
     current_reply_token = reply_token
-    
+    correct_count = 0  # 初始化正確答題計數器
     multiplication_quiz()
-
-def handle_answer(msg):
-    global waiting_for_answer, current_reply_token, current_question
-    
-    try:
-        user_answer = int(msg)
-        
-        # 取得目前的題目
-        num1, num2, correct_answer = current_question
-        
-        if user_answer == correct_answer:
-            line_bot_api.reply_message(
-                current_reply_token,
-                TextSendMessage(text="恭喜你答對了！")
-            )
-            # 正確答題計數器加一
-            correct_count = increment_correct_count()
-            if correct_count < 10:
-                multiplication_quiz()
-            else:
-                end_quiz()
-        else:
-            line_bot_api.reply_message(
-                current_reply_token,
-                TextSendMessage(text="嗯...再多想想答案吧")
-            )
-        
-        # 回答完畢，重設等待狀態
-        waiting_for_answer = False
-        
-    except ValueError:
-        line_bot_api.reply_message(
-            current_reply_token,
-            TextSendMessage(text="請輸入有效的數字！")
-        )
 
 def multiplication_quiz():
     global current_question
@@ -115,18 +85,48 @@ def multiplication_quiz():
         TextSendMessage(text=f"{num1} * {num2} 是多少？")
     )
 
-def increment_correct_count():
-    global correct_count
-    correct_count += 1
-    return correct_count
+def handle_answer(msg, reply_token):
+    global waiting_for_answer, correct_count
+    
+    try:
+        user_answer = int(msg)
+        
+        # 取得目前的題目
+        num1, num2, correct_answer = current_question
+        
+        if user_answer == correct_answer:
+            line_bot_api.reply_message(
+                reply_token,
+                TextSendMessage(text="恭喜你答對了！")
+            )
+            correct_count += 1  # 正確答題計數器加一
+            
+            if correct_count < 10:
+                multiplication_quiz()
+            else:
+                end_quiz()
+        else:
+            line_bot_api.reply_message(
+                reply_token,
+                TextSendMessage(text="嗯...再多想想答案吧")
+            )
+        
+    except ValueError:
+        line_bot_api.reply_message(
+            reply_token,
+            TextSendMessage(text="請輸入有效的數字！")
+        )
 
 def end_quiz():
-    global current_reply_token
+    global waiting_for_answer, correct_count
+    
+    waiting_for_answer = False
+    correct_count = 0  # 重設正確答題計數器
+    
     line_bot_api.reply_message(
         current_reply_token,
         TextSendMessage(text="恭喜你成功答對十題，做得很好！")
     )
-
 def getNews(num=10):
     """"擷取中央社新聞"""
     url = "https://www.cna.com.tw/list/aall.aspx"
