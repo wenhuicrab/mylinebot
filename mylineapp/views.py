@@ -59,7 +59,7 @@ def cambridge(word):
     rr += "\n出處:" + url
     return rr
     
-def multiplication_quiz():
+def multiplication_quiz(reply_token):
     correct_count = 0
     
     while correct_count < 10:
@@ -204,12 +204,8 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
-                 elif msg == '九九乘法表':
-                   msg = multiplication_quiz()
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text=msg)
-                    )
+                elif msg == '九九乘法表':
+                    multiplication_quiz(event.reply_token)
                 else:
                     tdnow = datetime.datetime.now()
                     msg = tdnow.strftime("%Y/%m/%d, %H:%M:%S") + '\n' + event.message.text
