@@ -16,6 +16,7 @@ def ask_question(reply_token=None):
         
     current_question = (num1, num2, correct_answer)
         
+    # 使用外部傳入的 reply_token 來回覆訊息
     line_bot_api.reply_message(
         reply_token,
         TextSendMessage(text=f"{num1} * {num2} 是多少？")
@@ -57,3 +58,5 @@ def end_quiz(reply_token):
         reply_token,
         TextSendMessage(text="恭喜你成功答對十題，做得很好！")
     )
+
+# 在這裡可以添加更多需要的功能或函式
