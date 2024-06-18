@@ -16,9 +16,20 @@ parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 import datetime
 import random
 
-waiting_for_answer = False
-current_question = None
-correct_count = 0
+def multiplication_quiz(reply_token):
+    global current_question
+    
+    num1 = random.randint(1, 9)
+    num2 = random.randint(1, 9)
+    
+    correct_answer = num1 * num2
+    
+    current_question = (num1, num2, correct_answer)
+    
+    line_bot_api.reply_message(
+        reply_token,
+        TextSendMessage(text=f"{num1} * {num2} 是多少？")
+    )
 
 def index(request):
     return HttpResponse("hello")
