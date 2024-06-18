@@ -60,14 +60,14 @@ def cambridge(word):
     return rr
     
 def start_quiz(reply_token):
-    global waiting_for_answer, current_reply_token
+    global waiting_for_answer, current_reply_token, current_question
     waiting_for_answer = True
     current_reply_token = reply_token
     
     multiplication_quiz()
 
 def handle_answer(msg):
-    global waiting_for_answer, current_reply_token
+    global waiting_for_answer, current_reply_token, current_question
     
     try:
         user_answer = int(msg)
@@ -80,6 +80,12 @@ def handle_answer(msg):
                 current_reply_token,
                 TextSendMessage(text="恭喜你答對了！")
             )
+            # 正確答題計數器加一
+            correct_count = increment_correct_count()
+            if correct_count < 10:
+                multiplication_quiz()
+            else:
+                end_quiz()
         else:
             line_bot_api.reply_message(
                 current_reply_token,
@@ -98,28 +104,29 @@ def handle_answer(msg):
 def multiplication_quiz():
     global current_question
     
-    correct_count = 0
+    num1 = random.randint(1, 9)
+    num2 = random.randint(1, 9)
+    correct_answer = num1 * num2
     
-    while correct_count < 10:
-        num1 = random.randint(1, 9)
-        num2 = random.randint(1, 9)
-        
-        correct_answer = num1 * num2
-        
-        current_question = (num1, num2, correct_answer)
-        
-        line_bot_api.reply_message(
-            current_reply_token,
-            TextSendMessage(text=f"{num1} * {num2} 是多少？")
-        )
-        
-        # 等待使用者回答，這裡示範等待使用者回答的方式，實際使用時需根據 Line Bot 的框架來修改
-        return
+    current_question = (num1, num2, correct_answer)
+    
+    line_bot_api.reply_message(
+        current_reply_token,
+        TextSendMessage(text=f"{num1} * {num2} 是多少？")
+    )
 
+def increment_correct_count():
+    global correct_count
+    correct_count += 1
+    return correct_count
+
+def end_quiz():
+    global current_reply_token
     line_bot_api.reply_message(
         current_reply_token,
         TextSendMessage(text="恭喜你成功答對十題，做得很好！")
     )
+
 def getNews(num=10):
     """"擷取中央社新聞"""
     url = "https://www.cna.com.tw/list/aall.aspx"
