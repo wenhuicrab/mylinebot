@@ -38,7 +38,51 @@ def getInvoice():
     rr += "頭獎：" + nums[2].text.strip() +" "+ nums[3].text.strip() +" "+ nums[4].text.strip()
 
     return rr
-
+def multiplication_quiz(reply_token):
+    correct_count = 0
+    
+    while correct_count < 10:
+        num1 = random.randint(1, 9)
+        num2 = random.randint(1, 9)
+        
+        correct_answer = num1 * num2
+        
+        while True:
+            try:
+                line_bot_api.reply_message(
+                    reply_token,
+                    TextSendMessage(text=f"{num1} * {num2} 是多少？")
+                )
+                
+                user_answer = int(input(f"{num1} * {num2} 是多少？ "))  # 在實際運行中，這裡的 input 需要改成從 Line Bot 接收使用者回答的方式
+                
+                if user_answer == correct_answer:
+                    correct_count += 1
+                    line_bot_api.reply_message(
+                        reply_token,
+                        TextSendMessage(text="恭喜你答對了！")
+                    )
+                    line_bot_api.reply_message(
+                        reply_token,
+                        TextSendMessage(text=f"已經答對了 {correct_count} 題！")
+                    )
+                    break
+                else:
+                    line_bot_api.reply_message(
+                        reply_token,
+                        TextSendMessage(text="嗯...再多想想答案吧")
+                    )
+                    
+            except ValueError:
+                line_bot_api.reply_message(
+                    reply_token,
+                    TextSendMessage(text="請輸入有效的數字！")
+                )
+    
+    line_bot_api.reply_message(
+        reply_token,
+        TextSendMessage(text="恭喜你成功答對十題，做得很好！")
+    )
 
 def getNews(num=10):
     """"擷取中央社新聞"""
@@ -133,6 +177,8 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
+                 elif msg == '九九乘法表':
+                    multiplication_quiz(event.reply_token)
 
                 else:
                     tdnow = datetime.datetime.now()
