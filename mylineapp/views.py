@@ -161,7 +161,7 @@ def callback(request):
                         TextSendMessage(text=msg)
                     )
                 elif msg == '九九乘法表':
-                    start_quiz(event.reply_token)  # 呼叫 start_quiz 函式來啟動測驗
+                    start_quiz(event.reply_token)  # 修正此行
                 elif waiting_for_answer:
                     handle_answer(msg, event.reply_token)
                     
