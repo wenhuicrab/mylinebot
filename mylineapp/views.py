@@ -176,8 +176,16 @@ def callback(request):
                         TextSendMessage(text=msg)
                     )
                 elif msg == '九九乘法':
-                    start_quiz()
-                    multiplication_quiz(event.reply_token)
+                    if multiplication_quiz:
+                        multiplication_quiz = False
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="測驗結束"))
+                    else:
+                        multiplication_quiz = True
+                        line_bot_api.reply_message(
+                            event.reply_token,
+                            TextSendMessage(text="測驗開始"))
                     
                 else:
                     tdnow = datetime.datetime.now()
