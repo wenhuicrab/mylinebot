@@ -9,7 +9,7 @@ from linebot.models import MessageEvent, TextSendMessage
 from linebot.models import StickerSendMessage
 from linebot.models import ImageSendMessage
 from linebot.models import LocationSendMessage
-from .quiz import start_quiz, handle_answer
+# from .quiz import start_quiz, handle_answer
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
