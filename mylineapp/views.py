@@ -11,7 +11,7 @@ from linebot.models import ImageSendMessage
 from linebot.models import LocationSendMessage
 
 import quiz as qz
-for quiz import multiplication_quiz
+from quiz import multiplication_quiz
 
 import datetime
 import random
