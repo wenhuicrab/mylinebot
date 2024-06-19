@@ -9,27 +9,17 @@ from linebot.models import MessageEvent, TextSendMessage
 from linebot.models import StickerSendMessage
 from linebot.models import ImageSendMessage
 from linebot.models import LocationSendMessage
-# from .quiz import start_quiz, handle_answer
 
-line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
-parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+import quiz as qz
+for quiz import multiplication_quiz
+
 import datetime
 import random
 
-def multiplication_quiz(reply_token):
-    global current_question
-    
-    num1 = random.randint(1, 9)
-    num2 = random.randint(1, 9)
-    
-    correct_answer = num1 * num2
-    
-    current_question = (num1, num2, correct_answer)
-    
-    line_bot_api.reply_message(
-        reply_token,
-        TextSendMessage(text=f"{num1} * {num2} 是多少？")
-    )
+line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
+parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+
+multiplication_ing = False
 
 def index(request):
     return HttpResponse("hello")
@@ -99,6 +89,8 @@ def getNews(num=10):
 
 @csrf_exempt
 def callback(request):
+    global multiplication_ing
+
     if request.method == 'POST':
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
@@ -175,17 +167,25 @@ def callback(request):
                         event.reply_token,
                         TextSendMessage(text=msg)
                     )
+                    
                 elif msg == '九九乘法':
-                    if multiplication_quiz:
-                        multiplication_quiz = False
+                    if multiplication_ing:
+                        multiplication_ing = False
                         line_bot_api.reply_message(
                             event.reply_token,
                             TextSendMessage(text="測驗結束"))
                     else:
-                        multiplication_quiz = True
+                        multiplication_ing = True
                         line_bot_api.reply_message(
                             event.reply_token,
                             TextSendMessage(text="測驗開始"))
+                        
+                elif multiplication_ing and event.message.text.isdigit():
+                    msg = qz.multiplication_quiz(event.message.text)
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=msg)
+                    )
                     
                 else:
                     tdnow = datetime.datetime.now()
