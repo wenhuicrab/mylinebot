@@ -10,7 +10,8 @@ from linebot.models import StickerSendMessage
 from linebot.models import ImageSendMessage
 from linebot.models import LocationSendMessage
 
-import quiz as qz
+from . import quiz as qz
+
 from quiz import multiplication_quiz
 
 import datetime
