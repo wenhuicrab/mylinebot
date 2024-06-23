@@ -52,7 +52,6 @@ def cambridge(word):
         rr += entry.find('div', class_="posgram").text + '\n'
         i = 1
         ddefs = entry.find_all("div", class_="def-body")
-        i = 1
         for ddef in ddefs:
             tran = ddef.find('span')
             rr += str(i) + '.' + tran.text + "\n"
@@ -170,6 +169,18 @@ def callback(request):
                         correct_answer = num1 * num2
                         reply_msg = f"測驗開始\n{num1} * {num2} 是多少?"
 
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=reply_msg)
+                    )
+                
+                elif msg == '結束測驗':
+                    if multiplication_ing:
+                        multiplication_ing = False
+                        reply_msg = "測驗已結束"
+                    else:
+                        reply_msg = "目前沒有進行中的測驗"
+                    
                     line_bot_api.reply_message(
                         event.reply_token,
                         TextSendMessage(text=reply_msg)
